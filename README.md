@@ -1,5 +1,9 @@
 # 서울 학교 공간 지도
 
+[![체육관 개방 학교 찾기, 반경 검색, 탭을 바꿔 학생 수 추이·교지 면적 보기를 차례로 보여 주는 19초 미리보기](preview.gif)](https://jennyseong-oss.github.io/seoul-school-space-map/)
+
+**[▶ 지도 열어 보기](https://jennyseong-oss.github.io/seoul-school-space-map/)** · [전체 소개 영상(104초)](https://jennyseong-oss.github.io/seoul-school-space-map/demo.mp4)
+
 서울 학교 1,368곳(학교알리미 2026 공시, 국립·공립·사립)의 **공간**에 관한 질문 — "우리 동네에서 체육관을 개방한 학교는?", "우리 구 학생 수는 5년 동안 얼마나 변했나?" — 에 답하는 지도입니다. 학교를 찾고, 비교하고, 집계표·엑셀로 받아 보고에 쓸 수 있습니다.
 
 - 화면: **https://jennyseong-oss.github.io/seoul-school-space-map/**
@@ -17,6 +21,7 @@
 | `서울학교공간지도/서울학교공간지도.html` | 화면 전체(한 파일). Pages에서는 `index.html` |
 | `서울학교공간지도/data/*.js` | 화면이 읽는 자료 스냅샷(학교알리미 공시, NEIS 학교기본정보, 전국초중등학교위치표준데이터 등 공공데이터) |
 | `demo.mp4` | 소개 영상(첫 화면·시설 개방·반경 검색·학교 카드·탭·집계표를 차례로 보여 줌) |
+| `preview.gif` | 이 README 맨 위의 미리보기(소개 영상에서 장면 넷을 골라 19초로) |
 | `.github/workflows/pages.yml` | GitHub Pages 배포 설정(화면 공개 주소) |
 | `.gitlab-ci.yml` | GitLab 배포 설정(같은 내용, GitLab 저장소용) |
 
