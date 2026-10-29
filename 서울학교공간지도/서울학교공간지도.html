@@ -404,6 +404,18 @@
     .link-copy .lk-t { display: none; }   /* 휴대폰: 정렬 줄을 한 줄로 두려고 🔗만(2026-10-14) */
   }
   @media (min-width: 761px) { .to-top-btn { display: none !important; } }
+  /* 태블릿 세로(2026-10-29): 아이패드 프로 13형 세로(1032px)에서 왼쪽 패널 460px을 빼면 지도가 572px 폭의 긴 띠가 되어
+     서울이 다 안 들어가고, 집계표 창(.map-panel.wide)은 102px로 찌그러졌다. 세로로 든 태블릿은 지도를 위에 화면 폭 그대로,
+     패널은 아래에 두고 패널 전체를 한 번에 스크롤한다(휴대폰 시트와 같은 방식, 목록 칸은 제 높이). 가로로 들면 PC 배치 그대로 */
+  @media (min-width: 761px) and (max-width: 1180px) and (orientation: portrait) {
+    .app { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 58fr) minmax(0, 42fr); }
+    .map-wrap { grid-row: 2; grid-column: 1; }
+    .side { grid-row: 3; grid-column: 1; border-right: none; border-top: 1px solid var(--line); box-shadow: 0 -4px 14px rgba(31,41,51,.08);
+      overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+    .side > * { flex-shrink: 0; }
+    .table-wrap { flex: none; overflow: visible; min-height: 0; }
+    .place-card { max-height: calc(100% - 72px); overflow: auto; }
+  }
 
   /* =====================================================================
      서울 학교 공간 지도 확장 스타일
