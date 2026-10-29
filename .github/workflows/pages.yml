@@ -1,6 +1,6 @@
 # GitHub Pages 배포(2026-10-05) — .gitlab-ci.yml과 같은 일을 GitHub에서 한다.
 # gitlab.aigov.go.kr는 Pages 기능이 꺼져 있어(파이프라인은 성공, pages:deploy 단계 없음) 화면 공개 주소를 GitHub Pages로 낸다.
-# 공개되는 것: 서울학교공간지도/서울학교공간지도.html(→ index.html), 서울학교공간지도/data/*.js
+# 공개되는 것: 서울학교공간지도/서울학교공간지도.html(→ index.html), 서울학교공간지도/data/*.js, demo.mp4(소개 영상, 2026-10-29)
 # 처음 한 번: 저장소 Settings → Pages → Source를 "GitHub Actions"로.
 name: pages
 on:
@@ -27,6 +27,8 @@ jobs:
           mkdir -p public/data
           cp 서울학교공간지도/서울학교공간지도.html public/index.html
           cp 서울학교공간지도/data/*.js public/data/
+          # 소개 영상: 저장소 파일 화면에서는 재생이 안 될 수 있어 Pages 주소(/demo.mp4)로도 낸다
+          cp demo.mp4 public/demo.mp4
           # 인증키 이름이 든 data 파일이 실수로 공개되지 않게 막는다(지금은 없어야 정상)
           if grep -qiE 'servicekey|apikey|authkey' public/data/*.js; then echo '서울학교공간지도/data/*.js에 인증키 이름이 들어 있어 배포를 멈춥니다.'; exit 1; fi
       - uses: actions/configure-pages@v5
