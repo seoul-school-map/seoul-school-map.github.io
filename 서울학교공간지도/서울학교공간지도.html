@@ -48,9 +48,10 @@
   body {
     margin: 0; font-family: 'Pretendard', sans-serif;
     color: var(--ink); background: var(--bg);
-    height: 100vh; overflow: hidden;
+    height: 100vh; height: 100dvh; overflow: hidden;
   }
-  .app { display: grid; grid-template-columns: 460px 1fr; grid-template-rows: auto 1fr; height: 100vh; }
+  /* 100dvh(2026-10-29): 아이패드 사파리는 100vh를 주소창·탭 줄을 뺀 실제 보이는 높이보다 크게 잡아 지도 아래쪽(학교 카드 끝)이 화면 밖으로 잘렸다 */
+  .app { display: grid; grid-template-columns: 460px 1fr; grid-template-rows: auto 1fr; height: 100vh; height: 100dvh; }
 
   /* ---------- 상단 통계 바 (조건 없으면 서울 전체, 늘 적용 조건이 걸리면 그 값 + 작은 "서울 ○○") ---------- */
   .topbar {
@@ -414,8 +415,25 @@
       overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
     .side > * { flex-shrink: 0; }
     .table-wrap { flex: none; overflow: visible; min-height: 0; }
-    .place-card { max-height: calc(100% - 72px); overflow: auto; }
+    /* 목록은 휴대폰처럼 30개교씩(isPagedList) — 1,368줄을 다 그리면 패널이 4만 px 길이가 되어 탭·검색으로 돌아가기 어려움 */
+    .more-row td { padding: 12px 16px 20px !important; border-bottom: none !important; text-align: center; }
+    .more-list-btn { width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid #CBD3DE; background: var(--brand-soft); color: var(--brand); font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+    .more-list-btn span { font-weight: 400; color: var(--ink-soft); font-size: 12px; margin-left: 4px; }
   }
+  /* 태블릿 가로(2026-10-29): 패널 460px이 늘 자리를 차지해 지도가 916px. 터치 화면에서만 지도 왼쪽 가장자리에 "목록 접기" 손잡이를 두고,
+     접으면 지도가 화면 폭 그대로. PC(마우스)는 그대로 둔다. 세로로 돌리면 접힘은 무시(세로 배치가 따로 있음) */
+  .side-toggle { display: none; }
+  @media (min-width: 761px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+    .side-toggle {
+      display: flex; align-items: center; gap: 4px; position: absolute; left: 0; top: 50%; transform: translateY(-50%); z-index: 505;
+      padding: 14px 8px 14px 6px; border: 1px solid var(--line); border-left: none; border-radius: 0 12px 12px 0;
+      background: var(--panel); color: var(--brand); font-family: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
+      writing-mode: vertical-rl; box-shadow: 2px 2px 10px rgba(31,41,51,.14);
+    }
+    body.side-collapsed .app { grid-template-columns: 1fr; }
+    body.side-collapsed .side { display: none; }
+  }
+  .place-card { max-height: calc(100% - 72px); overflow: auto; }   /* 지도 칸보다 길면 카드 안에서 스크롤(아래가 잘리지 않게) */
 
   /* =====================================================================
      서울 학교 공간 지도 확장 스타일
@@ -788,6 +806,7 @@
 
   <div class="map-wrap">
     <div id="map"></div>
+    <button type="button" class="side-toggle" id="sideToggle" aria-expanded="true">◀ 목록 접기</button>
     <div class="map-tools">
       <button type="button" class="map-tool" id="toolRadius">반경 검색</button>
       <button type="button" class="map-tool" id="toolGap" title="개방 학교에서 일정 거리 밖인 영역(추정)">반경 밖 영역</button>
@@ -2737,6 +2756,9 @@ function stuValCell(s, v) {
 const MOBILE_PAGE = 30;
 let listLimit = MOBILE_PAGE, listSig = '';
 const isMobileView = () => !!(window.matchMedia && window.matchMedia('(max-width: 760px)').matches);
+// 30개교씩 나눠 보이는 화면: 휴대폰 + 태블릿 세로(2026-10-29, 패널이 지도 아래 좁은 칸이라 1,368줄이 4만 px 길이가 됨)
+const PAGED_LIST_MQ = '(max-width: 760px), (min-width: 761px) and (max-width: 1180px) and (orientation: portrait)';
+const isPagedList = () => !!(window.matchMedia && window.matchMedia(PAGED_LIST_MQ).matches);
 
 function renderList() {
   const list = document.getElementById('list');
@@ -2767,7 +2789,7 @@ function renderList() {
   list.innerHTML = '';
   const numCols = tabNumCols(), facCols = showFacCols();
   let shown = schools;
-  if (isMobileView() && schools.length > listLimit) {
+  if (isPagedList() && schools.length > listLimit) {
     const selIdx = selectedSchool ? schools.findIndex(s => s.name === selectedSchool) : -1;   // 고른 학교는 늘 보이게
     shown = schools.slice(0, Math.max(listLimit, selIdx + 1));
   }
@@ -4316,6 +4338,16 @@ function fitMapTop(force) {
   if (mapAvailable) map.relayout();
 }
 window.addEventListener('resize', () => fitMapTop(true));
+// 태블릿을 돌리면 목록 나눠 보이기가 켜지거나 꺼지므로 다시 그림
+if (window.matchMedia) window.matchMedia(PAGED_LIST_MQ).addEventListener('change', () => renderList());
+// 태블릿 가로 "목록 접기"(2026-10-29): 접으면 지도가 화면 폭 그대로. 손잡이는 터치 가로 화면에서만 보임(CSS)
+document.getElementById('sideToggle').onclick = () => {
+  const collapsed = document.body.classList.toggle('side-collapsed');
+  const b = document.getElementById('sideToggle');
+  b.textContent = collapsed ? '▶ 목록 펴기' : '◀ 목록 접기';
+  b.setAttribute('aria-expanded', String(!collapsed));
+  fitMapTop(true);
+};
 
 // ---------------- 지금 화면을 링크로(2026-10-03, 목적 검토 6번) ----------------
 // 탭·늘 적용 조건·탭 전용 조건·비교 기간·검색·정렬·고른 학교를 주소 끝(#…)에 담는다. 받은 사람이 열면 같은 화면.
