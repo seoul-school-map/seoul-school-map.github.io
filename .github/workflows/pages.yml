@@ -27,6 +27,8 @@ jobs:
           mkdir -p public/data
           cp 서울학교공간지도/서울학교공간지도.html public/index.html
           cp 서울학교공간지도/data/*.js public/data/
+          # 홈 화면·탭 아이콘(2026-10-30)
+          cp -r 서울학교공간지도/icons public/icons
           # 소개 영상: 저장소 파일 화면에서는 재생이 안 될 수 있어 Pages 주소(/demo.mp4)로도 낸다
           cp demo.mp4 public/demo.mp4
           # 인증키 이름이 든 data 파일이 실수로 공개되지 않게 막는다(지금은 없어야 정상)

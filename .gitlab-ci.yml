@@ -15,6 +15,7 @@ pages:
     - mkdir -p public/data
     - cp 서울학교공간지도/서울학교공간지도.html public/index.html
     - cp 서울학교공간지도/data/*.js public/data/
+    - cp -r 서울학교공간지도/icons public/icons   # 홈 화면·탭 아이콘(2026-10-30)
     - cp demo.mp4 public/demo.mp4   # 소개 영상(2026-10-29)
     # 인증키 이름(serviceKey·apiKey·authKey 등)이 든 data 파일이 실수로 공개되지 않도록 막는다(지금 data/*.js에는 없어야 정상).
     # -q: 해당 줄을 작업 로그에 찍지 않게 조용히 검사만 한다.
