@@ -1,13 +1,13 @@
 # 서울 학교 공간 지도
 
-[![체육관 개방 학교 찾기, 반경 검색, 탭을 바꿔 학생 수 추이·교지 면적 보기를 차례로 보여 주는 19초 미리보기](preview.gif)](https://jennyseong-oss.github.io/seoul-school-space-map/)
+[![체육관 개방 학교 찾기, 반경 검색, 탭을 바꿔 학생 수 추이·교지 면적 보기를 차례로 보여 주는 19초 미리보기](preview.gif)](https://seoul-school-map.github.io/)
 
-**[▶ 지도 열어 보기](https://jennyseong-oss.github.io/seoul-school-space-map/)** · [전체 소개 영상(104초)](https://jennyseong-oss.github.io/seoul-school-space-map/demo.mp4)
+**[▶ 지도 열어 보기](https://seoul-school-map.github.io/)** · [전체 소개 영상(104초)](https://seoul-school-map.github.io/demo.mp4)
 
 서울 학교 1,368곳(학교알리미 2026 공시, 국립·공립·사립)의 **공간**에 관한 질문 — "우리 동네에서 체육관을 개방한 학교는?", "우리 구 학생 수는 5년 동안 얼마나 변했나?" — 에 답하는 지도입니다. 학교를 찾고, 비교하고, 집계표·엑셀로 받아 보고에 쓸 수 있습니다.
 
-- 지도 바로 열기(웹 브라우저에서, 설치 없이): **https://jennyseong-oss.github.io/seoul-school-space-map/**
-- 소개 영상(104초, 자막만): https://jennyseong-oss.github.io/seoul-school-space-map/demo.mp4 (저장소의 [`demo.mp4`](demo.mp4)와 같음)
+- 지도 바로 열기(웹 브라우저에서, 설치 없이): **https://seoul-school-map.github.io/**
+- 소개 영상(104초, 자막만): https://seoul-school-map.github.io/demo.mp4 (저장소의 [`demo.mp4`](demo.mp4)와 같음)
 - 지도 쓰는 법과 읽는 법: [`서울학교공간지도/활용_안내.md`](서울학교공간지도/활용_안내.md)
 - 자료별 출처·기준일: [`서울학교공간지도/데이터_출처_기준.md`](서울학교공간지도/데이터_출처_기준.md)
 

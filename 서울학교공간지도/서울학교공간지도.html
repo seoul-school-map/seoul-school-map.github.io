@@ -10,6 +10,13 @@
 <link rel="manifest" href="icons/site.webmanifest">
 <meta name="apple-mobile-web-app-title" content="학교공간지도">
 <meta name="application-name" content="학교공간지도">
+<!-- 링크 미리보기(메신저·검색, 2026-10-30): 주소에 "공간"이 없어 무엇을 보여 주는지 카드에 적음. 그림·주소는 절대 주소여야 해서 공개 주소 기준 -->
+<meta name="description" content="체육관·운동장 개방, 학생 수, 교지 면적을 학교별로. 학교알리미 공시 기준 서울 국공사립 학교.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="서울 학교 공간 지도">
+<meta property="og:description" content="체육관·운동장 개방, 학생 수, 교지 면적을 학교별로">
+<meta property="og:url" content="https://seoul-school-map.github.io/">
+<meta property="og:image" content="https://seoul-school-map.github.io/icons/icon-512.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <!-- 데이터 파일: disclosure.js(기준 자료, 학교알리미 공시 — 필수) / coords.js·corrections.js·districts.js(보정·고정 데이터) -->
 <script src="data/disclosure.js"></script>
@@ -672,6 +679,8 @@
   /* "이 지도 보는 법" 창(2026-10-03): 처음 온 사람에게 한 번 자동으로, 그 뒤엔 제목 옆 버튼으로 */
   .brand-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .brand-row h1 { margin-bottom: 0; }
+  /* 제목 아래 한 줄(2026-10-30): "공간 지도"가 건물 안 배치도처럼 읽혀서 무엇을 보여 주는지 붙임. 링크 미리보기 description과 같은 문구 */
+  .brand-sub { margin: 3px 0 0; font-size: 12px; color: var(--ink-soft); letter-spacing: -0.1px; }
   .help-btn { flex-shrink: 0; font-family: inherit; font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 999px; border: 1px solid #CBD3DE; background: var(--brand-soft); color: var(--brand); cursor: pointer; }
   .help-btn:hover { border-color: var(--brand); }
   .help-modal { position: fixed; inset: 0; z-index: 1000; background: rgba(31,41,51,.45); display: flex; align-items: center; justify-content: center; padding: 16px; }
@@ -713,6 +722,7 @@
     <div class="sheet-handle" id="sheetHandle"><span></span></div>
     <div class="brand">
       <div class="brand-row"><h1>서울 학교 공간 지도</h1><button type="button" class="help-btn" id="helpBtn" aria-haspopup="dialog">지도 보는 법</button></div>
+      <p class="brand-sub">체육관·운동장 개방, 학생 수, 교지 면적을 학교별로</p>
       <div class="layer-tabs" id="layerTabs">
         <button type="button" class="layer-tab on" data-layer="facility">시설 개방</button>
         <button type="button" class="layer-tab" data-layer="change" title="전년도 학교알리미 공시와 비교한 시설 개방 변화">개방 변화</button>
