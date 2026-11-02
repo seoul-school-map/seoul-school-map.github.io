@@ -4,6 +4,14 @@
 # - 공개되지 않는 것(저장소에는 있음): Claude outputs/, 참고자료, 수집기·변환 도구(연락처수집기·학생수수집기·공시변환기·좌표수집기), 검사/, 문서(.md), 엑셀
 #   (도구는 인증키를 넣어 쓰는 관리자용이라 로컬에서만 연다. API연결점검·data/config.js(실시간 조회)는 2026-10-02, 좌표점검·백업 HTML은 2026-10-03 삭제)
 # 러너가 외부 이미지를 못 받는 내부망이면 image 줄을 지우고 shell 러너에서 돌려도 된다(쓰는 명령은 mkdir·cp뿐).
+#
+# 2026-11-02 파이프라인 끔: gitlab.aigov.go.kr는 Pages가 꺼져 있어(10-05 확인) 이 작업이 성공해도 화면이 공개되지 않고,
+# security-deploy 러너가 사라져 push마다 "실패함"(#4934, stuck_pending_no_matching_runners)이 남았다. 화면 공개는 GitHub Pages(.github/workflows/pages.yml).
+# 다시 켜려면 아래 workflow 네 줄을 지운다(아래 pages 작업은 그대로 둠).
+workflow:
+  rules:
+    - when: never
+
 image: alpine:latest
 
 pages:
