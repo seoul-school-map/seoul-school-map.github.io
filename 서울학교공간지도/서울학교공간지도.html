@@ -914,10 +914,10 @@ function buildSchools(rows) {
     if (r.found) s.found = r.found;
     if (r.ex) s.ex = r.ex;
     // 좌표 우선순위: 사람이 확인한 보정 > coords.js > 추가 좌표(coords_extra.js, 개방 공시 보기에만 있는 학교)
-    const extra = typeof SCHOOL_COORDS_EXTRA !== 'undefined' ? SCHOOL_COORDS_EXTRA[r.name] : null;
+    const extra = typeof SCHOOL_COORDS_EXTRA !== 'undefined' ? byNameOrFormer(SCHOOL_COORDS_EXTRA, r.name) : null;
     const c = COORD_OVERRIDES[r.name] || byNameOrFormer(SCHOOL_COORDS, r.name) || (extra && extra.c);
     if (c) { s.lat = c[0]; s.lng = c[1]; } else { s.noCoord = true; }
-    if (extra && !COORD_OVERRIDES[r.name] && !SCHOOL_COORDS[r.name]) { s.coordSrc = extra.src; if (extra.addr) s.coordAddr = extra.addr; }
+    if (extra && !COORD_OVERRIDES[r.name] && !byNameOrFormer(SCHOOL_COORDS, r.name)) { s.coordSrc = extra.src; if (extra.addr) s.coordAddr = extra.addr; }
     return s;
   });
 }
