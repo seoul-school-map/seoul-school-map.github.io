@@ -713,6 +713,50 @@
     body.card-open .map-panel:not(.wide) { max-height: 46vh; }
   }
 
+  /* ---- 주변 학교 화면(2026-11-11)과 후보 줄 상자(.start-sug: 검색 후보·최근 본 학교가 함께 씀) ---- */
+  body.near-mode .side > :not(.brand):not(.sheet-handle):not(#nearView),
+  body.near-mode .layer-tabs { display: none !important; }
+  body.near-mode .brand { border-bottom: none; padding-bottom: 6px; }
+  .start-sug { margin-top: 6px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .start-sug button { display: flex; align-items: baseline; gap: 8px; width: 100%; padding: 10px 12px; border: none; border-bottom: 1px solid var(--line); background: var(--panel); font-family: inherit; font-size: 14px; font-weight: 600; color: var(--ink); text-align: left; cursor: pointer; }
+  .start-sug button:last-child { border-bottom: none; }
+  .start-sug button:hover, .start-sug button:focus-visible { background: var(--brand-soft); outline: none; }
+  .start-sug button span { font-size: 11.5px; font-weight: 400; color: var(--ink-soft); }
+  .start-sug .sug-none { padding: 10px 12px; font-size: 12.5px; color: var(--ink-soft); }
+  .start-skip { margin-top: 22px; padding: 0; border: none; background: none; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--brand); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  /* 시험판(2026-11-11 "찾아보는 지도"): 검색 후보 줄(이름 + 기본 사항) */
+  .search-sug button { flex-direction: column; align-items: flex-start; gap: 2px; padding: 9px 12px; }
+  .search-sug button span { font-size: 12.5px; color: var(--ink); }
+  .search-sug button.sug-region { flex-direction: row; align-items: baseline; justify-content: space-between; background: var(--bg); }
+  .search-sug button.sug-region span { color: var(--brand); font-weight: 600; }
+  /* 시험판(2026-11-11): 조건이 없을 때 목록 자리 */
+  body.list-idle #tableWrap, body.list-idle #listNote { display: none !important; }
+  .list-idle { padding: 14px 20px 20px; border-top: 1px solid var(--line); }
+  .list-idle .idle-msg { margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-soft); word-break: keep-all; }
+  .list-idle .idle-head { display: flex; align-items: baseline; justify-content: space-between; margin: 18px 0 0; font-size: 12px; font-weight: 700; color: var(--brand); }
+  .list-idle .idle-all { margin-top: 16px; font-size: 12px; padding: 4px 12px; }
+  .near-view { padding: 4px 20px 20px; overflow-y: auto; min-height: 0; flex: 1; }
+  .near-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; }
+  .near-bar .sp { flex: 1; }
+  .near-title { margin: 0; font-size: 19px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.35; word-break: keep-all; }
+  .near-me { margin: 4px 0 0; font-size: 12.5px; color: var(--ink-soft); word-break: keep-all; }
+  .near-me b { color: var(--ink); font-weight: 600; }
+  .near-group { margin: 18px 0 2px; font-size: 12px; font-weight: 700; color: var(--brand); }
+  .near-group span { font-weight: 400; color: var(--ink-soft); margin-left: 4px; }
+  .near-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .near-list li { display: grid; grid-template-columns: 1fr auto; gap: 1px 10px; padding: 9px 2px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .near-list li:hover { background: var(--bg); }
+  .near-list li.selected { background: var(--brand-soft); }
+  .near-list .n-name { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .near-list .n-dist { font-size: 13px; font-weight: 600; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+  .near-list .n-fac { grid-column: 1 / -1; font-size: 12px; color: var(--ink-soft); word-break: keep-all; }
+  .near-list .n-fac .dot { width: 7px; height: 7px; margin-right: 5px; vertical-align: 1px; }
+  .near-more { margin-top: 6px; }
+  .near-note { margin: 18px 0 0; font-size: 11.5px; line-height: 1.6; color: var(--ink-soft); word-break: keep-all; }
+  @media (max-width: 760px) {
+    .near-view { flex: none; overflow: visible; }
+  }
+
 </style>
 </head>
 <body>
@@ -731,11 +775,15 @@
         <button type="button" class="layer-tab" data-layer="site" title="학교알리미 공시 기준 학생 1인당 교지(교사대지+체육장)">교지 면적</button>
       </div>
     </div>
+    <!-- 주변 학교 화면(2026-11-11): 학교 카드의 "주변 학교 보기"나 #near=학교명으로 열림. 그동안 탭·필터·목록은 숨김 -->
+    <div class="near-view" id="nearView" hidden></div>
     <div class="search-box">
       <div class="search-wrap">
-        <input type="text" id="searchInput" placeholder="학교 이름으로 검색 (예: 가락고)">
+        <input type="text" id="searchInput" placeholder="학교·자치구·교육지원청 이름 (예: 가락고)" autocomplete="off">
         <button type="button" id="searchClear" class="search-clear" aria-label="검색어 지우기">✕</button>
       </div>
+      <!-- 시험판(2026-11-11 "찾아보는 지도"): 이름을 넣으면 후보 줄에 설립·학교급·자치구·교육지원청을 바로 보인다(카드를 열지 않아도 확인) -->
+      <div class="start-sug search-sug" id="searchSug" hidden></div>
     </div>
     <div class="district-select-wrap">
       <div class="ds-row">
@@ -811,6 +859,8 @@
       <button type="button" class="csv-btn" id="selXlsxBtn" title="체크한 학교만 목록과 같은 칸으로 엑셀 파일로 받습니다(넣을 항목은 위 내려받기 ▾ 설정을 따름)">엑셀</button>
       <button type="button" class="csv-btn" id="selClearBtn" title="체크를 모두 풉니다">✕ 해제</button>
     </div>
+    <!-- 시험판(2026-11-11): 조건이 없으면 1,368개교 목록 대신 안내 한 줄 + 최근 본 학교. 목록 칸은 "결과가 나오는 자리" -->
+    <div class="list-idle" id="listIdle" hidden></div>
     <div class="table-wrap" id="tableWrap">
       <table class="school-table">
         <thead id="tableHead"></thead>
@@ -1244,6 +1294,7 @@ let groupUnit = 'district';            // 'district'(자치구) | 'office'(교�
 let activeOffices = new Set();
 const checked = new Set();             // 다중 선택된 학교명
 let currentList = [];                  // 표에 지금 보이는 학교 목록
+let showAllList = false;               // 시험판(2026-11-11): 조건 없이 "전체 목록 보기"를 누른 상태(주소 #all=1)
 let radiusMode = false, radiusM = 1000, radiusCenter = null, radiusCircle = null, radiusPin = null;
 let gapMode = false, gapM = 1000, gapShapes = [], gapDistKey = '', gapFullKey = '';
 let gridInfo = null;
@@ -2298,7 +2349,10 @@ function renderCondLine(n) {
       + (i.fixed ? '' : `<button type="button" data-clear="${i.key}" aria-label="${esc(i.text)} 조건 해제" title="이 조건 해제">×</button>`) + '</span>';
   }).join('');
   const open = !document.getElementById('summaryPanel').classList.contains('folded');
-  document.getElementById('condLine').innerHTML = `<div class="cl-1">목록 <b>${fmtNum(n)}개교</b> · 조건: ${chips || '<b>전체 학교</b>'}`
+  const idle = listIdle(), noCond = !chips;
+  document.getElementById('condLine').innerHTML = `<div class="cl-1">${idle ? `서울 <b>${fmtNum(n)}개교</b> · 고른 조건 없음`
+    : `목록 <b>${fmtNum(n)}개교</b> · 조건: ${chips || '<b>전체 학교</b>'}`}`
+    + (showAllList && noCond ? ` <button type="button" class="link-btn" data-clear="all" title="전체 목록을 접습니다">목록 접기</button>` : '')
     + (clearable >= 2 ? ` <button type="button" class="link-btn" data-clear="*">모두 해제</button>` : '') + '</div>'
     + `<div class="cl-2"><span class="cl-sort">정렬 <b>${esc(sortLabel())}</b></span>`
     + `<button type="button" class="link-btn" id="summaryBtn" aria-expanded="${open}" aria-controls="summaryPanel" title="지금 조건에 맞는 학교들의 학교급별·시설별 합계">${open ? '요약 접기 ▴' : '요약 ▾'}</button></div>`;
@@ -2776,6 +2830,38 @@ const isMobileView = () => !!(window.matchMedia && window.matchMedia('(max-width
 const PAGED_LIST_MQ = '(max-width: 760px), (min-width: 761px) and (max-width: 1180px) and (orientation: portrait)';
 const isPagedList = () => !!(window.matchMedia && window.matchMedia(PAGED_LIST_MQ).matches);
 
+// ---------------- 시험판(2026-11-11): 조건이 없으면 목록을 그리지 않는다 ----------------
+// 담당자: "조건 없이 1,368개교 목록을 내려 본 적이 없다. 조건을 걸면 그 결과만 나오는 것이 깔끔하다."
+// 조건(검색·지역·학교급·설립·탭 전용 칩)·값 순 정렬·체크한 학교·"전체 목록 보기" 중 하나라도 있으면 지금처럼 목록, 없으면 안내 한 줄 + 최근 본 학교.
+// 내려받기는 currentList를 쓰므로 목록이 안 보여도 전체를 받는다. 최근 본 학교는 이 브라우저 저장소에만 둔다(서버·링크에 안 담음).
+const RECENT_KEY = 'seoulSchoolSpaceMap.recentSchools', RECENT_MAX = 5;
+function recentSchools() {
+  try { return (JSON.parse(localStorage.getItem(RECENT_KEY)) || []).map(n => SCHOOL_BY_NAME[n]).filter(Boolean).slice(0, RECENT_MAX); }
+  catch (e) { return []; }
+}
+function addRecentSchool(name) {
+  try {
+    const names = [name, ...recentSchools().map(s => s.name).filter(n => n !== name)].slice(0, RECENT_MAX);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(names));
+  } catch (e) { /* 저장소를 못 쓰면 최근 본 학교만 안 나옴 */ }
+}
+const listIdle = () => !showAllList && !sortColumn && !checked.size && !condItems().some(i => !i.fixed);
+function renderListIdle() {
+  const idle = listIdle(), box = document.getElementById('listIdle');
+  document.body.classList.toggle('list-idle', idle);
+  box.hidden = !idle;
+  if (!idle) { box.innerHTML = ''; return; }
+  const rec = recentSchools();
+  box.innerHTML = `<p class="idle-msg">학교 이름을 넣거나 조건을 고르면 여기에 목록이 나옵니다.</p>`
+    + (rec.length ? `<div class="idle-head"><span>최근 본 학교</span><button type="button" class="link-btn" id="recentClear" title="이 브라우저에 적어 둔 최근 본 학교를 지웁니다">지우기</button></div>
+      <div class="start-sug search-sug">${rec.map(s => `<button type="button" data-name="${esc(s.name)}">${esc(s.name)}<span>${esc(factLine(s))}</span></button>`).join('')}</div>` : '')
+    + `<button type="button" class="link-btn idle-all" id="idleAll">서울 전체 ${fmtNum(SCHOOLS.length)}개교 목록 보기</button>`;
+  box.querySelectorAll('button[data-name]').forEach(b => { b.onclick = () => selectSchool(SCHOOL_BY_NAME[b.dataset.name]); });
+  const rc = document.getElementById('recentClear');
+  if (rc) rc.onclick = () => { try { localStorage.removeItem(RECENT_KEY); } catch (e) { /* 무시 */ } renderListIdle(); };
+  document.getElementById('idleAll').onclick = () => { showAllList = true; renderList(); };
+}
+
 function renderList() {
   const list = document.getElementById('list');
   let schools = filteredSchools();
@@ -2792,6 +2878,8 @@ function renderList() {
   renderSortMenu();
   renderTopBar();   // 상단 숫자도 늘 적용 조건을 따름(2026-10-14)
   renderCondLine(schools.length);
+  renderListIdle();
+  if (listIdle()) { list.innerHTML = ''; return; }   // 조건이 없으면 표를 그리지 않는다(시험판 2026-11-11)
 
   if (schools.length === 0) {
     // 0건(10-14): "필터를 조정해주세요"만으로는 무엇을 풀지 몰라서, 조건 줄의 ×를 안내하고 한 번에 푸는 버튼
@@ -2911,6 +2999,51 @@ searchClear.addEventListener('click', () => {
   searchInput.dispatchEvent(new Event('input'));
   searchInput.focus();
 });
+
+// ---------------- 시험판(2026-11-11): "찾아보는 지도" — 검색 후보 줄에서 바로 확인 ----------------
+// 업무 중 가장 잦은 일은 "이 학교가 어느 교육지원청 소속인지, 공립인지 사립인지" 확인(담당자 실제 쓰임).
+// 후보 줄마다 설립·학교급·자치구·교육지원청을 적어 카드를 열지 않아도 읽게 하고, 자치구·교육지원청 이름을 넣으면 그 지역 목록으로 간다.
+const SUG_MAX = 6, SUG_REGION_MAX = 4;
+const officeFull = o => o && o !== '미분류' ? o + '교육지원청' : '';
+const schoolFacts = s => [['설립', s.found || ''], ['학교급', levelLabel(s.level)], ['자치구', s.district], ['교육지원청', officeFull(s.office)]].filter(x => x[1]);
+const factLine = s => schoolFacts(s).map(x => x[1]).join(' · ');
+function regionMatches(q) {
+  const ds = SEOUL_DISTRICTS.map(d => d.name).filter(n => n.includes(q))
+    .map(n => ({ unit: 'district', name: n, label: n, n: SCHOOLS.filter(s => s.district === n).length }));
+  const os = [...new Set(Object.values(OFFICE_OF_DISTRICT))].filter(o => officeFull(o).includes(q))
+    .map(o => ({ unit: 'office', name: o, label: officeFull(o), n: SCHOOLS.filter(s => s.office === o).length }));
+  return [...ds, ...os];
+}
+function hideSearchSug() { document.getElementById('searchSug').hidden = true; }
+function renderSearchSug() {
+  const box = document.getElementById('searchSug');
+  const q = searchInput.value.replace(/\s/g, '');
+  if (!q) { box.hidden = true; box.innerHTML = ''; return; }
+  const regs = regionMatches(q).slice(0, SUG_REGION_MAX), m = startMatches(q);
+  box.hidden = false;
+  box.innerHTML = regs.map(r => `<button type="button" class="sug-region" data-unit="${r.unit}" data-region="${esc(r.name)}">${esc(r.label)}<span>학교 ${fmtNum(r.n)}곳 목록 보기 →</span></button>`).join('')
+    + m.slice(0, SUG_MAX).map(s => `<button type="button" data-name="${esc(s.name)}">${esc(s.name)}<span>${esc(factLine(s))}</span></button>`).join('')
+    + (m.length > SUG_MAX ? `<div class="sug-none">외 ${fmtNum(m.length - SUG_MAX)}곳 — 아래 목록에 모두 있습니다.</div>` : '')
+    + (!m.length && !regs.length ? '<div class="sug-none">그런 이름의 학교·지역을 찾지 못했습니다. 이름 일부만 넣어 보세요(예: 가락).</div>' : '');
+  box.querySelectorAll('button[data-name]').forEach(b => { b.onclick = () => { hideSearchSug(); selectSchool(SCHOOL_BY_NAME[b.dataset.name]); }; });
+  box.querySelectorAll('button[data-region]').forEach(b => { b.onclick = () => {
+    hideSearchSug();
+    searchInput.value = ''; searchTerm = ''; updateSearchClear();
+    clearSelection();
+    if (groupUnit !== b.dataset.unit) setGroupUnit(b.dataset.unit);
+    activeGroupSet().clear();
+    setGroup(b.dataset.region);
+  }; });
+}
+searchInput.addEventListener('input', renderSearchSug);
+searchInput.addEventListener('focus', renderSearchSug);
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { hideSearchSug(); return; }
+  if (e.key !== 'Enter') return;
+  const m = startMatches(searchInput.value.replace(/\s/g, ''));
+  if (m.length) { hideSearchSug(); selectSchool(m[0]); }
+});
+document.addEventListener('click', e => { if (!e.target.closest('.search-box')) hideSearchSug(); });
 
 document.getElementById('onlyOpenToggle').addEventListener('change', e => {
   onlyOpen = e.target.checked;
@@ -3436,6 +3569,7 @@ function renderPlaceCard() {
       <a class="pc-btn" href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener noreferrer">네이버지도</a>
       ${hasPos ? `<a class="pc-btn" href="https://map.kakao.com/link/to/${q},${s.lat},${s.lng}" target="_blank" rel="noopener noreferrer">길찾기</a>` : ''}
       ${hasPos && mapAvailable ? '<button type="button" class="pc-btn" id="pcRadius">주변 반경 검색</button>' : ''}
+      ${hasPos ? '<button type="button" class="pc-btn" id="pcNear">주변 학교 보기</button>' : ''}
     </div>
     <details class="pc-src"><summary>자료 출처·수집일</summary>
     <div class="pc-foot">시설 개방: 학교알리미 정보공시 ${typeof DISCLOSURE_YEAR !== 'undefined' ? DISCLOSURE_YEAR : '?'}년 · 수집일 ${esc(typeof DISCLOSURE_DATA_DATE !== 'undefined' ? DISCLOSURE_DATA_DATE : '?')}</div>
@@ -3454,10 +3588,14 @@ function renderPlaceCard() {
   });
   const rb = document.getElementById('pcRadius');
   if (rb) rb.onclick = () => { setRadiusMode(true); setRadiusCenter(s.lat, s.lng, s.name); };
+  const nb = document.getElementById('pcNear');
+  if (nb) nb.onclick = () => enterNear(s);
 }
 function openPlaceCard(school) {
   cardOffice = null;
   cardSchool = school;
+  addRecentSchool(school.name);   // 최근 본 학교(시험판 2026-11-11) — 조건이 없을 때 목록 자리에 보임
+  if (listIdle()) renderListIdle();
   const box = document.getElementById('placeCard');
   delete box.dataset.key;   // 학교를 새로 열면 펼침 상태는 탭 기준으로 처음부터
   renderPlaceCard();
@@ -4251,6 +4389,7 @@ function bindUi() {
   document.getElementById('condLine').onclick = e => {
     if (e.target.closest('#summaryBtn')) return toggleSummary();
     const c = e.target.closest('[data-clear]');
+    if (c && c.dataset.clear === 'all') { showAllList = false; sortColumn = null; sortDir = 'asc'; return renderList(); }
     if (c) resetConds(c.dataset.clear === '*' ? null : [c.dataset.clear]);
   };
   const dlBtn = document.getElementById('dlBtn'), dlMenu = document.getElementById('dlMenu');
@@ -4365,6 +4504,95 @@ document.getElementById('sideToggle').onclick = () => {
   fitMapTop(true);
 };
 
+// ---------------- 주변 학교 화면(2026-11-11) ----------------
+// 학교 카드의 "주변 학교 보기"(또는 주소 #near=학교명)로 연다: 고른 학교에서 가까운 초·중·고와 개방 공시 시설.
+// 왼쪽 패널 안에서만 그려 지도를 못 불러와도 동작한다. 첫 화면을 이 질문으로 시작하던 시험판은 뺌(시험보관/우리학교로시작하기_2026-11-11.patch).
+// 기준점은 학교(공개된 좌표)라 링크(#near=학교명)에 담아도 된다. 거리와 공시값만 보이고 판정·순위 표현은 쓰지 않는다.
+const NEAR_LEVELS = ['초', '중', '고'], NEAR_FIRST = 3, NEAR_MORE = 10;
+let nearSchool = null, nearMore = new Set();
+const sideMode = () => document.body.classList.contains('near-mode') ? 'near' : '';
+function setSideMode(mode) {
+  document.body.classList.toggle('near-mode', mode === 'near');
+  document.getElementById('nearView').hidden = mode !== 'near';
+  document.getElementById('sidePanel').scrollTop = 0;
+}
+const nearOpenFacs = s => isSchoolClosed(s) ? [] : FACILITIES.filter(f => s.fac[f] === '유');
+function nearFacHtml(s, noDot) {
+  const open = nearOpenFacs(s);
+  const text = isSchoolClosed(s) ? '휴교 중' : s.ex ? '시설 개방 공시 제외' : open.length ? '개방 공시 · ' + open.join(' · ') : '개방한다고 공시한 시설 없음';
+  return (noDot ? '' : `<span class="dot ${open.length ? 'open' : 'closed'}"></span>`) + text;
+}
+function nearRows(center, lv) {
+  return SCHOOLS.filter(s => s.level === lv && !s.noCoord && s.name !== center.name)
+    .map(s => ({ s, d: distM(center.lat, center.lng, s.lat, s.lng) }))
+    .sort((a, b) => a.d - b.d);
+}
+function nearShown(center) {
+  return NEAR_LEVELS.map(lv => ({ lv, rows: nearRows(center, lv).slice(0, nearMore.has(lv) ? NEAR_MORE : NEAR_FIRST) }));
+}
+function renderNear() {
+  const box = document.getElementById('nearView');
+  const c = SCHOOL_BY_NAME[nearSchool];
+  if (!c) { box.innerHTML = ''; return; }
+  const y = typeof DISCLOSURE_YEAR !== 'undefined' ? DISCLOSURE_YEAR : '';
+  box.innerHTML = `
+    <div class="near-bar">
+      <button type="button" class="csv-btn" id="nearBack">← 전체 지도</button>
+      <span class="sp"></span>
+      <button type="button" class="csv-btn" id="nearLink" title="이 화면을 담은 주소를 복사합니다. 받은 사람이 열면 같은 화면이 나옵니다">🔗 링크 복사</button>
+    </div>
+    <h2 class="near-title">${c.name} 주변 학교</h2>
+    <p class="near-me"><b>${c.name}</b> · ${c.district} · ${nearFacHtml(c, true)}</p>
+    ${nearShown(c).map(g => `
+      <div class="near-group">가까운 ${levelLabel(g.lv)}<span>직선거리</span></div>
+      <ul class="near-list">
+        ${g.rows.map(x => `<li data-name="${x.s.name}" class="${selectedSchool === x.s.name ? 'selected' : ''}">
+          <span class="n-name">${x.s.name}</span><span class="n-dist">${fmtDist(x.d)}</span>
+          <span class="n-fac">${nearFacHtml(x.s)}</span></li>`).join('')}
+      </ul>
+      ${nearMore.has(g.lv) ? '' : `<button type="button" class="link-btn near-more" data-more="${g.lv}">${levelLabel(g.lv)} ${NEAR_MORE}곳까지 보기</button>`}`).join('')}
+    <p class="near-note">학교알리미 ${y} 공시 기준입니다. 공시값은 실제 이용 가능 여부와 다를 수 있으니 이용은 학교에 확인해 주세요. 거리는 직선거리이고, 가까운 학교가 배정 학교를 뜻하지는 않습니다.</p>
+    <button type="button" class="start-skip" id="nearFull">${c.name}를 서울 전체 지도·다섯 탭에서 보기 →</button>`;
+  box.querySelectorAll('li[data-name]').forEach(li => {
+    li.onclick = () => { highlightSchool(SCHOOL_BY_NAME[li.dataset.name]); renderNear(); };
+  });
+  box.querySelectorAll('[data-more]').forEach(b => { b.onclick = () => { nearMore.add(b.dataset.more); renderNear(); nearFitMap(); }; });
+  document.getElementById('nearBack').onclick = () => { const s = SCHOOL_BY_NAME[nearSchool]; leaveToFull(); if (s) selectSchool(s); syncHash(); };
+  document.getElementById('nearLink').onclick = copyViewLink;
+  document.getElementById('nearFull').onclick = () => { const s = SCHOOL_BY_NAME[nearSchool]; leaveToFull(); if (s) selectSchool(s); };
+}
+function nearFitMap() {
+  const c = SCHOOL_BY_NAME[nearSchool];
+  if (!mapAvailable || !c) return;
+  try {
+    const b = boundsOfSchools([c, ...nearShown(c).flatMap(g => g.rows.map(x => x.s))]);
+    if (b) map.setBounds(b, 60, 60, 60, 60);
+  } catch (e) { /* 지도 맞춤은 실패해도 목록은 그대로 */ }
+}
+function enterNear(school) {
+  if (!school || school.noCoord) { toast('이 학교는 위치 정보가 없어 주변 학교를 찾을 수 없습니다.'); return; }
+  nearSchool = school.name;
+  nearMore = new Set();
+  selectedSchool = null;
+  hidePlaceCard();
+  setSelectedMarker(school.name);
+  setSideMode('near');
+  renderNear();
+  nearFitMap();
+  syncHash();
+}
+function leaveToFull() {
+  nearSchool = null;
+  setSideMode('');
+  renderList();
+  fitMapTop(true);
+  autoHelpOnce();
+}
+function startMatches(q) {
+  return SCHOOLS.filter(s => s.name.includes(q))
+    .sort((a, b) => a.name.indexOf(q) - b.name.indexOf(q) || a.name.length - b.name.length);
+}
+
 // ---------------- 지금 화면을 링크로(2026-10-03, 목적 검토 6번) ----------------
 // 탭·늘 적용 조건·탭 전용 조건·비교 기간·검색·정렬·고른 학교를 주소 끝(#…)에 담는다. 받은 사람이 열면 같은 화면.
 // 기본값은 담지 않아 처음 화면은 주소가 깔끔하다. 서버로 보내지 않는 # 부분이라 망분리·오프라인에서도 그대로 동작.
@@ -4386,8 +4614,10 @@ function stateToHash() {
   if (activeTrendKinds.size) p.set('tk', setStr(activeTrendKinds));
   if (hasTrendData() && TREND_PRESETS.length && TREND_YEARS[trendI1] - TREND_YEARS[trendI0] !== TREND_PRESETS[0].span) p.set('span', TREND_YEARS[trendI1] - TREND_YEARS[trendI0]);
   if (searchTerm) p.set('q', searchTerm);
+  if (showAllList) p.set('all', '1');
   if (sortColumn) p.set('s', `${sortColumn}:${sortDir}`);
   if (selectedSchool) p.set('sel', selectedSchool);
+  if (nearSchool) p.set('near', nearSchool);   // 주변 학교 화면(시험판 2026-11-11) — 기준 학교 이름만
   return p.toString();
 }
 let hashReady = false;   // 주소에서 상태를 다 읽기 전에는 주소를 덮어쓰지 않는다
@@ -4421,9 +4651,11 @@ function readHashState() {
   const span = +p.get('span');
   if (span && hasTrendData()) { const i0 = TREND_YEARS.indexOf(TREND_YEARS[trendI1] - span); if (i0 >= 0) trendI0 = i0; }
   if (p.get('q')) { searchTerm = p.get('q').trim(); searchInput.value = searchTerm; updateSearchClear(); }
+  if (p.get('all') === '1') showAllList = true;
   const [sc, sd] = (p.get('s') || '').split(':');
   if (sc && (SORT_COL_LABEL[sc] || FACILITIES.includes(sc) || LAYER_ONLY_SORT[sc])) { sortColumn = sc; sortDir = sd === 'desc' ? 'desc' : 'asc'; }
   if (p.get('sel') && SCHOOL_BY_NAME[p.get('sel')]) st.sel = p.get('sel');
+  if (p.get('near') && SCHOOL_BY_NAME[p.get('near')]) st.near = p.get('near');
   return st;
 }
 async function copyViewLink() {
@@ -4464,7 +4696,9 @@ function helpHtml() {
       <li><b>맨 위 숫자 줄</b>은 조건이 없으면 <b>서울 전체</b> 값입니다. 자치구·학교급·설립·검색 조건을 걸면 그 조건의 값이 크게, 서울 전체가 아래 작게 나옵니다(탭 안 칩으로 학교를 거르지는 않고, 시설 개방 탭에서 시설을 고르면 그 시설 기준으로 개방·미개방을 셈). 학교급별·시설별 합계는 조건 줄의 ${key('요약 ▾')} 에 있습니다.</li>
       <li><b>자치구·학교급·설립</b>은 어느 탭에서나 걸리는 조건입니다. 탭에서만 쓰는 조건(시설, 구간, 비교 기간 등)은 "○○ 탭에서 골라 보기"의 ${key('펼치기 ▾')}를 눌러 엽니다.</li>
       <li>지도를 <b>축소</b>하면 자치구(또는 교육지원청)별 색과 숫자가, <b>확대</b>하면 학교 핀과 묶음 원(숫자 = 학교 수)이 보입니다. 자치구 숫자는 그 구의 값이라, 탭에서 고른 칩은 반영되지 않습니다.</li>
-      <li>학교 핀이나 목록의 학교를 누르면 <b>학교 카드</b>가 열립니다. 지금 탭과 관련된 내용이 펼쳐져 있습니다.</li>
+      <li><b>검색 칸</b>에 학교 이름을 넣으면 후보 줄에 설립·학교급·자치구·교육지원청이 바로 나옵니다. 자치구·교육지원청 이름을 넣으면 그 지역 학교 목록으로 갑니다.</li>
+      <li><b>목록</b>은 검색하거나 조건을 고르면 나옵니다. 조건이 없을 때는 최근 본 학교가 나오고, ${key('서울 전체 목록 보기')} 로 모두 펼 수 있습니다.</li>
+      <li>학교 핀이나 목록의 학교를 누르면 <b>학교 카드</b>가 열립니다. 지금 탭과 관련된 내용이 펼쳐져 있고, ${key('주변 학교 보기')} 로 가까운 초·중·고와 개방 공시 시설을 거리순으로 볼 수 있습니다.</li>
       <li>지도 위 ${key('반경 검색')} 은 한 지점 주변의 학교를 거리순으로, ${key('반경 밖 영역')} 은 개방 학교에서 일정 거리 밖인 영역(추정)을, ${key('집계표')} 는 자치구·교육지원청별 합계를 보여 줍니다. 목록과 집계표는 엑셀(서식 포함)·CSV로 받을 수 있습니다(목록은 정렬 옆 ${key('내려받기 ▾')}).</li>
       <li>목록에서 학교 2~4곳을 체크하면 아래 ${key('나란히 보기')} 로 시설·학생·추이·교지를 한 표에서 견줄 수 있습니다(숫자 아래에 같은 구·서울 같은 학교급 값, 순위 없음).</li>
       <li>정렬 줄 오른쪽 ${key('🔗 링크')} 로 지금 탭·조건·고른 학교를 담은 주소를 동료에게 보낼 수 있습니다. 받은 사람이 열면 같은 화면이 나옵니다.</li>
@@ -4504,6 +4738,11 @@ function initHelp() {
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
+  autoHelpOnce();
+}
+// 처음 방문에 한 번 자동으로. 주변 학교 화면(#near=…)으로 열었을 때는 띄우지 않고, 전체 지도로 넘어갈 때 띄운다(2026-11-11)
+function autoHelpOnce() {
+  if (sideMode()) return;
   let seen = false;
   try { seen = !!localStorage.getItem(HELP_SEEN_KEY); } catch (e) { seen = true; }   // 저장소를 못 쓰면 매번 띄우지 않음
   if (!seen) openHelp();
@@ -4533,7 +4772,9 @@ async function boot() {
   fitMapTop(true);
   if (fromHash.layer) setLayer(fromHash.layer);
   if (mapAvailable && (activeGroupSet().size || activeLevels.size || searchTerm)) { updateMapViewMode(); syncOfficeCard(); focusMap(filteredSchools()); }
-  if (fromHash.sel) selectSchool(SCHOOL_BY_NAME[fromHash.sel]);
+  // 주소가 #near=학교명이면 주변 학교 화면부터(2026-11-11). 첫 화면은 늘 전체 지도 — 문을 두면 다시 온 사람·지원청 담당자에게 한 단계가 늘어서
+  if (fromHash.near) enterNear(SCHOOL_BY_NAME[fromHash.near]);
+  if (fromHash.sel) { if (fromHash.near) { highlightSchool(SCHOOL_BY_NAME[fromHash.sel]); renderNear(); } else selectSchool(SCHOOL_BY_NAME[fromHash.sel]); }
   hashReady = true;
   syncHash();
   initHelp();
